@@ -1,36 +1,34 @@
-import openai
+# acsim/ai_analysis.py
 import streamlit as st
+from openai import OpenAI   # <- nouveau client
+import os
 
-def analyser_scenarios(scenario1, scenario2, results1, results2):
-    """
-    Utilise l'API OpenAI (DeepSeek) pour générer une analyse automatique des deux scénarios.
-    Nécessite `openai_api_key` et `openai_base_url` dans st.secrets.
-    """
-    # Configuration de l'API OpenAI/DeepSeek
-    openai.api_key = st.secrets['openai_api_key']
-    openai.api_base = st.secrets['openai_base_url']
-    # Préparation du prompt d'analyse en français avec les données des scénarios
-    total1 = results1['total_energy_kWh']
-    total2 = results2['total_energy_kWh']
-    peak1 = results1['peak_power_kW']
-    peak2 = results2['peak_power_kW']
-    # Description textuelle des scénarios
-    description = (
-        f"Scénario 1 (baseline) : Isolation {scenario1.isolation}, Vitrage {scenario1.vitrage}, Ventilation {scenario1.ventilation}, Charges internes {scenario1.interne}.\n" 
-        f"Consommation annuelle de climatisation : {total1:.1f} kWh, Puissance maximale : {peak1:.1f} kW.\n\n" 
-        f"Scénario 2 (optimisé) : Isolation {scenario2.isolation}, Vitrage {scenario2.vitrage}, Ventilation {scenario2.ventilation}, Charges internes {scenario2.interne}.\n" 
-        f"Consommation annuelle de climatisation : {total2:.1f} kWh, Puissance maximale : {peak2:.1f} kW.\n\n" 
-        "Analyse comparative des deux scénarios :" 
+# Création du client OpenAI (API DeepSeek)
+client = OpenAI(
+    api_key  = st.secrets.get("openai_api_key", os.getenv("OPENAI_API_KEY")),
+    base_url = st.secrets.get("openai_base_url", "https://api.deepseek.com/v1")
+)
+
+def analyser_scenarios(sc1, sc2, res1, res2):
+    """Retourne un commentaire IA (DeepSeek) comparant deux scénarios."""
+    conso1 = res1['total_energy_kWh']
+    conso2 = res2['total_energy_kWh']
+    pct    = (1 - conso2/conso1) * 100 if conso1 else 0
+
+    prompt = (
+        "Analyse en français la différence énergétique entre deux scénarios de climatisation :\n"
+        f"- Scénario 1 : isolation {sc1.isolation}, vitrage {sc1.vitrage}, ventilation {sc1.ventilation}, "
+        f"charges internes {sc1.interne}. Conso annuelle = {conso1:.1f} kWh.\n"
+        f"- Scénario 2 : isolation {sc2.isolation}, vitrage {sc2.vitrage}, ventilation {sc2.ventilation}, "
+        f"charges internes {sc2.interne}. Conso annuelle = {conso2:.1f} kWh.\n"
+        f"Économie : {pct:.1f} %.\n"
+        "Explique les raisons techniques de l'écart et donne deux recommandations d'amélioration."
     )
-    # Appel à l'API OpenAI pour obtenir l'analyse
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Tu es un assistant expert en efficacité énergétique des bâtiments. Fournis une analyse technique en français."},
-            {"role": "user", "content": description}
-        ],
-        temperature=0.7
+
+    response = client.chat.completions.create(
+        model       = "deepseek-chat",      # ou un autre modèle DeepSeek
+        messages    = [{"role": "user", "content": prompt}],
+        temperature = 0.7,
+        max_tokens  = 300
     )
-    # Récupérer le texte de la réponse de l'assistant
-    analyse_text = response['choices'][0]['message']['content'].strip()
-    return analyse_text
+    return response.choices[0].message.content.strip()
