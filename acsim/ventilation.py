@@ -2,8 +2,8 @@
 # Taux de renouvellement d'air (volumique) en volume/heure selon le niveau
 ACH_values = {
     "Faible": 0.2,   # Bâtiment très étanche (0.2 volumes par heure)
-    "Moyen": 0.5,    # Ventilation moyenne (0.5 vol/h)
-    "Élevé": 1.0     # Infiltrations élevées (1 vol/h)
+    "Moyen": 1.5,    # Ventilation moyenne (1.5 vol/h)
+    "Élevé": 6.0     # Infiltrations élevées (6 vol/h)
 }
 # Volume intérieur du bâtiment (m³) - hypothèse pour une maison de ~100 m² au sol
 VOLUME_M3 = 250.0
