@@ -2,8 +2,8 @@
 # Coefficients de transmission thermique (UA en W/K) pour l'isolation des murs/toit en fonction du niveau
 UA_wall = {
     "Faible": 300.0,   # Mauvaise isolation -> pertes élevées
-    "Moyen": 150.0,    # Isolation moyenne
-    "Élevé": 80.0      # Très bonne isolation -> pertes réduites
+    "Moyen": 120.0,    # Isolation moyenne
+    "Élevé": 100.0      # Très bonne isolation -> pertes réduites
 }
 # Coefficients de transmission thermique (UA en W/K) pour les vitrages (fenêtres) en fonction du niveau
 UA_window = {
