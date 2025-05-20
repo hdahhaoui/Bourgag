@@ -46,7 +46,7 @@ NIVEAUX = ["Faible", "Moyen", "Élevé"]
 help_iso  = "Qualité de l'isolation des parois opaques.\nFaible : murs peu isolés (UA ≈ 300 W/K)\nMoyen : isolation standard (UA ≈ 150 W/K)\nÉlevé : RT‑2020 (UA ≈ 80 W/K)"
 help_vit  = "Performance des vitrages + protections solaires.\nFaible : simple vitrage, aucun store\nÉlevé : double vitrage performant + stores extérieurs"
 help_vent = "Taux de renouvellement d'air (infiltrations + ventilation).\nFaible : 0,2 vol/h — bâtiment très étanche\nÉlevé : 1 vol/h — forte infiltration"
-help_int  = "Apports de chaleur internes : occupants, éclairage, appareils.\nFaible ≈ 0,5 kW ; Moyen ≈ 1 kW ; Élevé ≈ 1,5 kW constants."
+help_int  = "Apports de chaleur internes : occupants, éclairage, appareils.\nFaible ≈ 1,5 kW ; Moyen ≈ 3 kW ; Élevé ≈ 4,5 kW constants."
 
 st.sidebar.subheader("Scénario 1 : Baseline")
 iso1  = st.sidebar.selectbox("Isolation", NIVEAUX, index=0, help=help_iso)
