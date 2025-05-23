@@ -1,9 +1,9 @@
 # Courbes COP (T_ext → COP) pour trois qualités de climatiseur
 # Points : (température extérieure en °C, COP)
 COP_CURVES = {
-    "Entrée de gamme": [(15, 4.0), (25, 3.2), (35, 2.5), (45, 2.0)],
-    "Standard":        [(15, 5.0), (25, 4.2), (35, 3.2), (45, 2.4)],
-    "Haute efficacité (A+++)": [(15, 6.5), (25, 5.0), (35, 4.0), (45, 3.0)]
+    "Entrée de gamme": [(15, 3.0), (25, 2.5), (35, 1.8), (45, 1.5)],
+    "Standard":        [(15, 4.2), (25, 3.8), (35, 2.8), (45, 2)],
+    "Haute efficacité (A+++)": [(15, 6.5), (25, 5.0), (35, 4.3), (45, 3.0)]
 }
 
 def cop_temperature(type_ac: str, T_ext: float) -> float:
