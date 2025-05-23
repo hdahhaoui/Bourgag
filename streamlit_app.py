@@ -70,7 +70,7 @@ QUALITES_AC = ["Entrée de gamme", "Standard", "Haute efficacité (A+++)"]
 type_ac = st.sidebar.selectbox(
     "Type / qualité",
     QUALITES_AC, index=1,
-    help="Courbe COP différente :\nEntrée de gamme → COP ~1,8 à 35 °C ext.\nA+++ → COP ~4,3 à 35 °C."
+    help="Courbe COP différente :\nEntrée de gamme → COP ~1,8 à 35 °C ext. \nStandard → COP ~2,8 à 35 °C ext. \nHaut de gamme → COP ~4,3 à 35 °C ext."
 )
 cap_nom = st.sidebar.number_input(
     "Puissance nominale (kW froid)",
