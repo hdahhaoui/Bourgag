@@ -27,9 +27,20 @@ else:
     st.sidebar.info("📂 Fichier d'exemple utilisé (exemple_meteo.epw)")
 
 # --------------------------------------------------
-# 2. CONSIGNE
+# 2. PÉRIODE DE SIMULATION
 # --------------------------------------------------
-st.sidebar.header("2. Température intérieure de consigne")
+st.sidebar.header("2. Période de simulation")
+periode = st.sidebar.selectbox(
+    "Plage temporelle",
+    ["Annuel", "Été (juin à août)"]
+)
+if periode == "Été (juin à août)":
+    meteo_df = meteo_df[meteo_df['datetime'].dt.month.isin([6, 7, 8])]
+
+# --------------------------------------------------
+# 3. CONSIGNE
+# --------------------------------------------------
+st.sidebar.header("3. Température intérieure de consigne")
 T_int = st.sidebar.number_input(
     "Consigne (°C)",
     min_value=10, max_value=30, value=25,
@@ -37,9 +48,9 @@ T_int = st.sidebar.number_input(
 )
 
 # --------------------------------------------------
-# 3. PARAMÈTRES BÂTIMENT
+# 4. PARAMÈTRES BÂTIMENT
 # --------------------------------------------------
-st.sidebar.header("3. Paramètres du bâtiment")
+st.sidebar.header("4. Paramètres du bâtiment")
 
 NIVEAUX = ["Faible", "Moyen", "Élevé"]
 
@@ -61,9 +72,9 @@ vent2 = st.sidebar.selectbox("Ventilation / infiltrations ", NIVEAUX, index=0, k
 int2  = st.sidebar.selectbox("Charges internes ", NIVEAUX, index=1, key="int2", help=help_int)
 
 # --------------------------------------------------
-# 4. PARAMÈTRES CLIMATISEUR
+# 5. PARAMÈTRES CLIMATISEUR
 # --------------------------------------------------
-st.sidebar.header("4. Paramètres du climatiseur")
+st.sidebar.header("5. Paramètres du climatiseur")
 
 QUALITES_AC = ["Entrée de gamme", "Standard", "Haute efficacité (A+++)"]
 
@@ -100,8 +111,10 @@ df1, df2 = res1["data"], res2["data"]
 # INDICATEURS
 # --------------------------------------------------
 col1, col2, col3 = st.columns(3)
-col1.metric("Conso annuelle S1", f"{res1['total_energy_kWh']:.1f} kWh")
-col2.metric("Conso annuelle S2", f"{res2['total_energy_kWh']:.1f} kWh")
+etiquette1 = "Conso annuelle S1" if periode == "Annuel" else "Conso été S1"
+etiquette2 = "Conso annuelle S2" if periode == "Annuel" else "Conso été S2"
+col1.metric(etiquette1, f"{res1['total_energy_kWh']:.1f} kWh")
+col2.metric(etiquette2, f"{res2['total_energy_kWh']:.1f} kWh")
 gain = (1 - res2['total_energy_kWh']/res1['total_energy_kWh'])*100 if res1['total_energy_kWh'] else 0
 col3.metric("Économie", f"{gain:.1f} %")
 
